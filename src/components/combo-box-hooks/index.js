@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
+import { useStateValue, useMainValue } from '../../state-management';
 import styled from 'styled-components';
 import _ from 'underscore';
 
@@ -7,6 +8,8 @@ export default forwardRef(ComboBoxHooks);
 export function ComboBoxHooks(props, ref) {
   const [isOpen, setIsOpen] = useState(props.isOpenByDefault);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [state, dispatch] = useStateValue();
+  const [mainState, mainDispatch] = useMainValue();
 
   const triggerRef = useRef();
   const comboBoxRef = useRef();
@@ -20,6 +23,9 @@ export function ComboBoxHooks(props, ref) {
   }
 
   function onKeyDown(event) {
+    dispatch({ type: 'increment-test', value: 1 });
+    mainDispatch({ type: 'testing', value: 2 });
+  
     const isUpArrow = event.keyCode === 38;
     const isDownArrow = event.keyCode === 40;
     const isEscKey = event.keyCode === 27;
@@ -90,7 +96,7 @@ export function ComboBoxHooks(props, ref) {
         ref={triggerRef}
         onClick={onTriggerClick}
       >
-        {props.name}
+        {props.name} {state.test} {mainState.test}
       </Trigger>
       <Dropdown>
         {
