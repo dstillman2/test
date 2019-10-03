@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Trigger = styled.button`
+const StyledTrigger = styled.button`
 	background-color: #44c767;
 	border-radius: 5px;
 	border: 1px solid #18ab29;
@@ -12,11 +12,11 @@ const Trigger = styled.button`
 	text-shadow: 0px 1px 0px #2f6627;
 `;
 
-const Dropdown = styled.div``;
+const StyledDropdown = styled.div``;
 
-const Input = styled.input``;
+const StyledInput = styled.input``;
 
-const ComboBoxOptions = styled.ul`
+const StyledComboBoxOptions = styled.ul`
   display: ${props => props.isOpen ? 'block' : 'none'};
   border: 2px solid #000;
   width: 250px;
@@ -24,22 +24,22 @@ const ComboBoxOptions = styled.ul`
   margin: 0;
 `;
 
-const ComboBoxOption = styled.li`
+const StyledComboBoxOption = styled.li`
   list-style-type: none;
   border: 1px solid #000;
   cursor: pointer;
 `;
 
-const CurrentComboBoxOption = styled(ComboBoxOption)`
+const StyledCurrentComboBoxOption = styled(StyledComboBoxOption)`
   background-color: red;
   color: #fff;
 `;
 
 export {
-  Trigger,
-  Dropdown,
-  Input,
-  ComboBoxOptions,
-  ComboBoxOption,
-  CurrentComboBoxOption
+  StyledTrigger,
+  StyledDropdown,
+  StyledInput,
+  StyledComboBoxOptions,
+  StyledComboBoxOption,
+  StyledCurrentComboBoxOption
 }

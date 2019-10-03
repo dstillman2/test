@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
-import ComboBoxHooks from '.';
-import { StateProvider, MainProvider, reducerOne, reducerTwo } from '../../state-management';
+import ComboBox from '.';
+import { StateProvider, reducer } from '../../state-management';
 
 let container;
 
@@ -21,10 +21,8 @@ test('renders the combo box hooks component', () => {
   
   act(() => {
     ReactDOM.render((
-      <StateProvider reducer={reducerOne} initialState={{ test: 0 }}>
-        <MainProvider reducer={reducerTwo} initialState={{ test: 5 }}>
-          <ComboBoxHooks ref={newRef} />
-        </MainProvider>
+      <StateProvider reducer={reducer} initialState={{}}>
+        <ComboBox ref={newRef} />
       </StateProvider>
     ), container);
   });

@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import _ from 'underscore';
 import {
-  Trigger,
-  Dropdown,
-  Input,
-  ComboBoxOptions,
-  ComboBoxOption,
-  CurrentComboBoxOption
-} from './style';
+  StyledTrigger,
+  StyledDropdown,
+  StyledInput,
+  StyledComboBoxOptions,
+  StyledComboBoxOption,
+  StyledCurrentComboBoxOption
+} from './css';
 
 const forwardRefComboBoxHooks = forwardRef(ComboBoxHooks);
 
@@ -97,23 +97,23 @@ export function ComboBoxHooks(props, ref) {
 
   return (
     <>
-      <Trigger
+      <StyledTrigger
         aria-owns={uniqueId}
         ref={triggerRef}
         onClick={onTriggerClick}
       >
         {props.name}
-      </Trigger>
-      <Dropdown>
+      </StyledTrigger>
+      <StyledDropdown>
         {
           props.search && (
-            <Input
+            <StyledInput
               placeholder={props.search.placeholder}
               type="text"
             />
           )
         }
-        <ComboBoxOptions
+        <StyledComboBoxOptions
           ref={comboBoxRef}
           isOpen={isOpen}
           tabIndex="-1"
@@ -121,10 +121,10 @@ export function ComboBoxHooks(props, ref) {
         >
           {
             props.items.map((item, index) => {
-              let OptionComponent = ComboBoxOption;
+              let OptionComponent = StyledComboBoxOption;
 
               if (currentIndex === index) {
-                OptionComponent = CurrentComboBoxOption;
+                OptionComponent = StyledCurrentComboBoxOption;
               }
 
               return (
@@ -138,8 +138,8 @@ export function ComboBoxHooks(props, ref) {
               );
             })
           }
-        </ComboBoxOptions>
-      </Dropdown>
+        </StyledComboBoxOptions>
+      </StyledDropdown>
     </>
   );
 };
