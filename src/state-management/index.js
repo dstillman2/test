@@ -19,3 +19,21 @@ export const MainProvider = ({ reducer, initialState, children }) => (
 );
 
 export const useMainValue = () => useContext(MainContext);
+
+export function reducerOne(state, action) {
+  switch (action.type) {
+    case 'increment-test':
+      return { ...state, test: state.test + action.value };
+    default:
+      return state;
+  }
+}
+
+export function reducerTwo(state = {}, action) {
+  switch (action.type) {
+    case 'testing':
+      return { ...state, test: state.test + action.value };
+    default:
+      return state;
+  }
+}

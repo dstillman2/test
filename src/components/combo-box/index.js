@@ -1,89 +1,53 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
+import _ from 'underscore';
+import {
+  Trigger,
+  Dropdown,
+  Input,
+  ComboBoxOptions,
+  ComboBoxOption,
+  CurrentComboBoxOption
+} from './style';
 
-const Trigger = styled.button`
-	background-color: #44c767;
-	border-radius: 5px;
-	border: 1px solid #18ab29;
-	cursor: pointer;
-	color: #fff;
-	font-size: 12px;
-	padding: 5px 8px;
-	text-decoration: none;
-	text-shadow: 0px 1px 0px #2f6627;
-`;
+const forwardRefComboBoxHooks = forwardRef(ComboBoxHooks);
 
-const Dropdown = styled.div``;
+forwardRefComboBoxHooks.defaultProps = {
+  items: [],
+  name: 'default'
+};
 
-const Input = styled.input``;
+export function ComboBoxHooks(props, ref) {
+  const [isOpen, setIsOpen] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-const ComboBoxOptions = styled.ul`
-  display: ${props => props.isOpen ? 'block' : 'none'};
-  border: 2px solid #000;
-  width: 250px;
-  padding: 0;
-  margin: 0;
-`;
+  const triggerRef = useRef();
+  const comboBoxRef = useRef();
+  const uniqueId = _.uniqueId();
 
-const ComboBoxOption = styled.li`
-  list-style-type: none;
-  border: 1px solid #000;
-  cursor: pointer;
-`;
-
-const CurrentComboBoxOption = styled(ComboBoxOption)`
-  background-color: red;
-  color: #fff;
-`;
-
-export default class ComboBox extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isOpen: props.isOpenByDefault,
-      currentIndex: 0,
-      activeIndex: props.selected || 0
-    };
-
-    this.triggerRef = React.createRef();
-    this.comboBoxRef = React.createRef();
-  
-    this.uniqueId = Math.random().toString().split('.')[1];
-  }
-
-  onTriggerClick = event => {
+  function onTriggerClick(event) {
     event.stopPropagation();
     event.preventDefault();
 
-    this.setState(prevState => ({
-      isOpen: ! prevState.isOpen
-    }));
+    setIsOpen(! isOpen);
   }
-  
-  onKeyDown = event => {
+
+  function onKeyDown(event) {  
     const isUpArrow = event.keyCode === 38;
     const isDownArrow = event.keyCode === 40;
     const isEscKey = event.keyCode === 27;
     const isEnterKey = event.keyCode === 13;
     const isSpacebar = event.keyCode === 32;
 
-    const currentIndex = this.state.currentIndex;
-    const lastIndex = this.props.items.length - 1;
-    
-    if (isEnterKey || isSpacebar) {
-      event.preventDefault();
-      this.setState({ isOpen: false });
-      return;
-    }
+    const lastIndex = props.items.length - 1;
 
-    if (isEscKey) {
-      this.setState({ isOpen: false });
+    if (isEnterKey || isSpacebar || isEscKey) {
+      event.preventDefault();
+      setIsOpen(false);
       return;
     }
 
     let nextIndex;
-  
+
     if (isUpArrow) {
 
       if (currentIndex === 0) {
@@ -101,90 +65,83 @@ export default class ComboBox extends React.Component {
       } else {
         nextIndex = currentIndex + 1;
       }
-    
+
     }
 
     if (typeof nextIndex !== 'number') return;
 
-    this.setState((prevProps, prevState) => ({
-      currentIndex: nextIndex
-    }));
+    setCurrentIndex(nextIndex);
   }
 
-  onOptionClick(event, index) {
-    this.setState({ isOpen: false });
+  function onOptionClick(event, index) {
+    setIsOpen(false);
   }
 
-  focusComboBox() {
-    this.comboBoxRef.current.focus();
-  }
+  const isFirstRender = useRef(true);
 
-  focusTrigger() {
-    this.triggerRef.current.focus();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const isOpenHasUpdated = prevState.isOpen !== this.state.isOpen;
-
-    if (isOpenHasUpdated) {
-
-      if (this.state.isOpen) {
-        this.focusComboBox();
-      } else {
-        this.focusTrigger();
-      }
-
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else if (isOpen) {
+      comboBoxRef.current.focus();
+    } else {
+      triggerRef.current.focus();
     }
-  }
+  }, [isOpen]);
 
-  render() {
-    return (
-      <>
-        <Trigger
-          aria-owns={this.uniqueId}
-          ref={this.triggerRef}
-          onClick={this.onTriggerClick}
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      triggerRef.current.focus();
+    }
+  }));
+
+  return (
+    <>
+      <Trigger
+        aria-owns={uniqueId}
+        ref={triggerRef}
+        onClick={onTriggerClick}
+      >
+        {props.name}
+      </Trigger>
+      <Dropdown>
+        {
+          props.search && (
+            <Input
+              placeholder={props.search.placeholder}
+              type="text"
+            />
+          )
+        }
+        <ComboBoxOptions
+          ref={comboBoxRef}
+          isOpen={isOpen}
+          tabIndex="-1"
+          onKeyDown={onKeyDown}
         >
-          {this.props.name}
-        </Trigger>
-        <Dropdown>
           {
-            this.props.search && (
-              <Input
-                placeholder={this.props.search.placeholder}
-                type="text"
-              />
-            )
+            props.items.map((item, index) => {
+              let OptionComponent = ComboBoxOption;
+
+              if (currentIndex === index) {
+                OptionComponent = CurrentComboBoxOption;
+              }
+
+              return (
+                <OptionComponent
+                  onClick={event => onOptionClick(event, index)}
+                  id={`${uniqueId}-${index}`}
+                  key={item}
+                >
+                  {item}
+                </OptionComponent>
+              );
+            })
           }
-          <ComboBoxOptions
-            id={this.uniqueId}
-            ref={this.comboBoxRef}
-            isOpen={this.state.isOpen}
-            tabIndex="-1"
-            onKeyDown={this.onKeyDown}
-          >
-            {
-              this.props.items.map((item, index) => {
-                let OptionComponent = ComboBoxOption;
+        </ComboBoxOptions>
+      </Dropdown>
+    </>
+  );
+};
 
-                if (this.state.currentIndex === index) {
-                  OptionComponent = CurrentComboBoxOption;
-                }
-
-                return (
-                  <OptionComponent
-                    onClick={event => this.onOptionClick(event, index)}
-                    id={`${this.uniqueID}-${index}`}
-                    key={item}
-                  > 
-                    {item}
-                  </OptionComponent>
-                );
-              })
-            }
-          </ComboBoxOptions>
-        </Dropdown>
-      </>
-    );
-  }
-}
+export default forwardRefComboBoxHooks;

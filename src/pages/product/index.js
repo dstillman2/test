@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
 import Header from '../../site/header-hooks';
 import ErrorBoundary from '../../site/error-boundary';
-import { StateProvider, MainProvider } from '../../state-management';
+import { StateProvider, MainProvider, reducerOne, reducerTwo } from '../../state-management';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -12,24 +12,6 @@ const GlobalStyle = createGlobalStyle`
     font-family: Arial, Helvetica, sans-serif;
   }
 `;
-
-function reducer(state, action) {
-  switch (action.type) {
-    case 'increment-test':
-      return { ...state, test: state.test + action.value };
-    default:
-      return state;
-  }
-}
-
-function reducerTwo(state = {}, action) {
-  switch (action.type) {
-    case 'testing':
-      return { ...state, test: state.test + action.value };
-    default:
-      return state;
-  }
-}
 
 export default function ProductPage(props) {
   const firstComboBox = useRef();
@@ -41,14 +23,13 @@ export default function ProductPage(props) {
     secondComboBox.current.focus();
     setInitialStateOne({ test: Math.random() })
   }
+
   return (
-    <StateProvider reducer={reducer} initialState={initialStateOne}>
+    <StateProvider reducer={reducerOne} initialState={initialStateOne}>
       <MainProvider reducer={reducerTwo} initialState={initialStateTwo}>
         <GlobalStyle />
         <Application>
-          <ErrorBoundary>
-            <Header />
-          </ErrorBoundary>
+          <Header />
           <Main>
             <button
               onClick={onButtonClick}
@@ -60,11 +41,7 @@ export default function ProductPage(props) {
               name="language"
               items={['french', 'spanish', 'english', 'cherry', 'lorsum']}
             />
-            <ComboBox
-              ref={secondComboBox}
-              name="topic"
-              items={['apples', 'fruits', 'salaries', 'vegetables', 'eateries']}
-            />
+            <ComboBox ref={secondComboBox} />
           </Main>
           <Footer>
             this is the footer
