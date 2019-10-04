@@ -1,30 +1,27 @@
 import React, { useRef } from 'react';
 import ComboBox from '../../components/combo-box';
-import { StateProvider, reducer } from '../../state';
-import {
-  StyledApplication,
-  StyledMainRegion as StyledMain,
-  StyledFooter
-} from './css';
+import { setNumberOfGears } from '../../state/actions/main.action';
+import { useStateContext } from '../../state/context/core';
 
-function ProductPage(props) {
-  const refComboBox = useRef();
+import { StyledMain } from './css';
+
+function ProductPage() {
+  const [state, dispatch] = useStateContext();
+
+  const onClick = () => {
+    const gears = Math.floor(Math.random() * 10) + 1;
+    dispatch(setNumberOfGears(gears, dispatch));
+  };
 
   return (
-    <StateProvider reducer={reducer} initialState={{}}>
-      <StyledApplication>
-        <StyledMain>
-          <ComboBox
-            ref={refComboBox}
-            name="language"
-            items={['french', 'spanish', 'english', 'cherry', 'lorsum']}
-          />
-        </StyledMain>
-        <StyledFooter>
-          this is the footer
-        </StyledFooter>
-      </StyledApplication>
-    </StateProvider>
+    <StyledMain>
+      <button onClick={onClick}>
+        Change Gears
+      </button>
+      <div>
+        {state.numberOfGears}
+      </div>
+    </StyledMain>
   );
 };
 

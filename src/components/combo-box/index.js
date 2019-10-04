@@ -9,14 +9,7 @@ import {
   StyledCurrentComboBoxOption
 } from './css';
 
-const forwardRefComboBoxHooks = forwardRef(ComboBoxHooks);
-
-forwardRefComboBoxHooks.defaultProps = {
-  items: [],
-  name: 'default'
-};
-
-export function ComboBoxHooks(props, ref) {
+function ComboBoxHooks(props, ref) {
   const [isOpen, setIsOpen] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -31,7 +24,9 @@ export function ComboBoxHooks(props, ref) {
     setIsOpen(! isOpen);
   }
 
-  function onKeyDown(event) {  
+  function onKeyDown(event) {
+    event.preventDefault();
+
     const isUpArrow = event.keyCode === 38;
     const isDownArrow = event.keyCode === 40;
     const isEscKey = event.keyCode === 27;
@@ -41,7 +36,6 @@ export function ComboBoxHooks(props, ref) {
     const lastIndex = props.items.length - 1;
 
     if (isEnterKey || isSpacebar || isEscKey) {
-      event.preventDefault();
       setIsOpen(false);
       return;
     }
@@ -144,4 +138,12 @@ export function ComboBoxHooks(props, ref) {
   );
 };
 
+const forwardRefComboBoxHooks = forwardRef(ComboBoxHooks);
+
+forwardRefComboBoxHooks.defaultProps = {
+  items: [],
+  name: ''
+};
+
+export { ComboBoxHooks };
 export default forwardRefComboBoxHooks;

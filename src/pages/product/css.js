@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const StyledApplication = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(100vh - 50px);
   background: #f9f9f9;
 `;
 
@@ -18,6 +18,6 @@ const StyledFooter = styled.footer`
 
 export {
   StyledApplication,
-  StyledMainRegion,
+  StyledMainRegion as StyledMain,
   StyledFooter
 }

@@ -31,7 +31,19 @@ export default function Header(props) {
     }
   });
 
-  function onMenuButtonClick() {
+  useEffect(function() {
+    const callback = () => {
+      setIsMenuOpen(false);
+    };
+
+    window.addEventListener('click', callback);
+
+    return () => {
+      window.removeEventListener('click', callback);
+    }
+  });
+
+  function onMenuButtonClick(event) {
     setIsMenuOpen(! isMenuOpen);
   }
 
@@ -40,7 +52,7 @@ export default function Header(props) {
       <StyledWrapper>
         <StyledLogo></StyledLogo>
         <StyledNavigation>
-          <StyledMenuContainer>
+          <StyledMenuContainer onClick={event => event.stopPropagation()}>
             <StyledMenuButton onClick={onMenuButtonClick}>≡</StyledMenuButton>
             <StyledMenuList isOpen={isMenuOpen}>
               <StyledMenuListItem>

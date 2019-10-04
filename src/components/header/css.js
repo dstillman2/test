@@ -6,7 +6,7 @@ const StyledWrapper = styled.header`
   align-items: center;
   justify-content: space-between;
   background: #e4e4e4;
-  height: 50px;
+  height: 70px;
 `;
 
 const StyledLogo = styled.div`

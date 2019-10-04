@@ -1,9 +1,6 @@
-import React from 'react';
 
 function HomePage(props) {
-  return (
-    <div>Home Page</div>
-  );
+  return 'Home Page'
 };
 
 export default HomePage;
