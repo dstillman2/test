@@ -1,6 +1,6 @@
 function localStorageMiddleware(name) {
   return function (state) {
-    if (!window.localStorage) return;
+    if (! window.localStorage) return;
 
     let stringifiedState;
 

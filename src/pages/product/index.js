@@ -1,9 +1,9 @@
-import React, { useRef } from 'react';
-import ComboBox from '../../components/combo-box';
+import React from 'react';
 import { setNumberOfGears } from '../../state/actions/main.action';
 import { useStateContext } from '../../state/context/core';
+import ProductImage from '../../components/product-image';
 
-import { StyledMain } from './css';
+import { StyledMain, StyledOptions } from './css';
 
 function ProductPage() {
   const [state, dispatch] = useStateContext();
@@ -15,12 +15,13 @@ function ProductPage() {
 
   return (
     <StyledMain>
-      <button onClick={onClick}>
-        Change Gears
-      </button>
-      <div>
-        {state.numberOfGears}
-      </div>
+      <ProductImage />
+      <StyledOptions>
+        <h2>Mechanisaurus</h2>
+        <button onClick={onClick}>
+          Change Gears
+        </button>
+      </StyledOptions>
     </StyledMain>
   );
 };

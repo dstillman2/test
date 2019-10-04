@@ -1,14 +1,16 @@
 import styled from 'styled-components';
 
-const StyledApplication = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 50px);
-  background: #f9f9f9;
+const StyledMain = styled.main`
+  display: block;
+
+  @media screen and (min-width: 576px) {
+    display: flex;
+  }
 `;
 
-const StyledMainRegion = styled.main`
+const StyledOptions = styled.div`
   flex: 1;
+  text-align: center;
 `;
 
 const StyledFooter = styled.footer`
@@ -17,7 +19,7 @@ const StyledFooter = styled.footer`
 `;
 
 export {
-  StyledApplication,
-  StyledMainRegion as StyledMain,
+  StyledMain,
+  StyledOptions,
   StyledFooter
 }
