@@ -7,7 +7,7 @@ function ProductImage(props) {
 
   return (
     <StyledImage>
-      {state.numberOfGears}
+      <div data-test-styled-image>{state.numberOfGears}</div>
       {props.children}
     </StyledImage>
   )

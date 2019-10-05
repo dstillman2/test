@@ -11,7 +11,7 @@ const StateContext = createContext();
 
 const useStateContext = () => useContext(StateContext);
 
-const initialState = fetchFromLocalStorage('settings');
+const initialState = fetchFromLocalStorage('settings', { defaultValue: {} });
 
 const combinedReducers = combineReducers([mainReducer]);
 
